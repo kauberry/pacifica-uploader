@@ -56,8 +56,8 @@ configuration = instrument_server.UploaderConfiguration()
 
 # development VERSION
 VERSION = {
-    'version_string': '2.2.10',
-    'last_updated': datetime.datetime.strptime('12.06.17', '%m.%d.%y')
+    'version_string': '2.2.11',
+    'last_updated': datetime.datetime.strptime('12.21.17', '%m.%d.%y')
 }
 
 
@@ -141,7 +141,7 @@ def populate_upload_page(request, testmode=False):
         return login_error(request, "Pacifica user is not found")
     # Render the upload page with the meta (just the render format) and the default root directory
     # template_name = 'themes/{0}/uploader.html'.format(configuration.theming.get('theme_name'))
-    template_name = 'base_uploader.html'
+    template_name = 'uploader.html'
 
     theming = configuration.theming
     # if(configuration.theme_name):
@@ -818,7 +818,13 @@ def get_bundle(request):
             item = os.path.basename(itempath)
 
             # tree structure
-            clipped_path = itempath.replace(common_path, '')
+            # handle rood directory slightly differently
+            if configuration.data_dir == itempath:
+                head, tail = os.path.split(itempath)
+                clipped_path = tail
+            else:
+                clipped_path = itempath.replace(common_path, '')
+
             subdirs = []
             make_tree(lastnode, subdirs, clipped_path, item, itempath, files)
 

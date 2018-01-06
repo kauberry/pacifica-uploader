@@ -16,6 +16,7 @@ services:
      - uploadamqp
      - policyserver
      - metadataserver
+     - ingestserver
     environment:
       AMQP_PORT_5672_TCP_ADDR: uploadamqp
       AMQP_PORT_5672_TCP_PORT: 5672
@@ -81,7 +82,10 @@ services:
   #     REMOTE_PORT: 8181
 
   policyserver:
-    image: pacifica/policy
+    # image: pacifica/policy
+    build:
+        context: ../policy
+    container_name: uploader_policyserver
     links:
       - metadataserver:metadata
     ports:
